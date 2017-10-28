@@ -7,7 +7,7 @@ EncoderToTimer::EncoderToTimer(){
 
 }
 void EncoderToTimer::init(Encoder_TypeDef encoderId){
-
+	//http://www.disca.upv.es/aperles/arm_cortex_m3/curset/STM32F4xx_DSP_StdPeriph_Lib_V1.0.1/html/group___t_i_m___group8.html
 	this ->encoderId = encoderId;
 	if (this->encoderId == ENCODER_1){
 		GPIO_InitTypeDef GPIO_InitStructure;
@@ -60,54 +60,54 @@ void EncoderToTimer::init(Encoder_TypeDef encoderId){
 		this->reset();
 		printf("encoder init ready: \r\n");
 	}else if (this->encoderId == ENCODER_2){
-			GPIO_InitTypeDef GPIO_InitStructure;
-			// turn on the clocks for each of the ports needed
-			RCC_AHB1PeriphClockCmd (RCC_AHB1Periph_GPIOB, ENABLE);
+		GPIO_InitTypeDef GPIO_InitStructure;
+		// turn on the clocks for each of the ports needed
+		RCC_AHB1PeriphClockCmd (RCC_AHB1Periph_GPIOB, ENABLE);
 
 
-			// now configure the pins themselves
-			// they are all going to be inputs with pullups
-			GPIO_StructInit (&GPIO_InitStructure);
-			GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-			//GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-			GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
-			GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
-			GPIO_Init(GPIOB, &GPIO_InitStructure);
+		// now configure the pins themselves
+		// they are all going to be inputs with pullups
+		GPIO_StructInit (&GPIO_InitStructure);
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+		//GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+		GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+		GPIO_Init(GPIOB, &GPIO_InitStructure);
 
-			GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
-			GPIO_Init(GPIOB, &GPIO_InitStructure);
-
-
-			// Connect the pins to their Alternate Functions
-			GPIO_PinAFConfig (GPIOB, GPIO_PinSource4, GPIO_AF_TIM3);
-			GPIO_PinAFConfig (GPIOB, GPIO_PinSource5, GPIO_AF_TIM3);
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
+		GPIO_Init(GPIOB, &GPIO_InitStructure);
 
 
-			// Timer peripheral clock enable
-			RCC_APB1PeriphClockCmd (RCC_APB1Periph_TIM3, ENABLE);
+		// Connect the pins to their Alternate Functions
+		GPIO_PinAFConfig (GPIOB, GPIO_PinSource4, GPIO_AF_TIM3);
+		GPIO_PinAFConfig (GPIOB, GPIO_PinSource5, GPIO_AF_TIM3);
 
 
-			// set them up as encoder inputs
-			// set both inputs to rising polarity to let it use both edges
-			/*
-			TIM_EncoderInterfaceConfig (TIM4, TIM_EncoderMode_TI12,
-									  TIM_ICPolarity_Rising,
-									  TIM_ICPolarity_Rising);
-			*/
-			TIM_EncoderInterfaceConfig (TIM3, TIM_EncoderMode_TI1,
-											  TIM_ICPolarity_Rising,
-											  TIM_ICPolarity_Rising);
+		// Timer peripheral clock enable
+		RCC_APB1PeriphClockCmd (RCC_APB1Periph_TIM3, ENABLE);
+
+
+		// set them up as encoder inputs
+		// set both inputs to rising polarity to let it use both edges
+		/*
+		TIM_EncoderInterfaceConfig (TIM4, TIM_EncoderMode_TI12,
+								  TIM_ICPolarity_Rising,
+								  TIM_ICPolarity_Rising);
+		*/
+		TIM_EncoderInterfaceConfig (TIM3, TIM_EncoderMode_TI1,
+										  TIM_ICPolarity_Rising,
+										  TIM_ICPolarity_Rising);
 
 
 
-			TIM_SetAutoreload (TIM3, 0xffff);
+		TIM_SetAutoreload (TIM3, 0xffff);
 
 
-			// turn on the timer/counters
-			TIM_Cmd (TIM3, ENABLE);
+		// turn on the timer/counters
+		TIM_Cmd (TIM3, ENABLE);
 
-			this->reset();
-			printf("encoder init ready: \r\n");
+		this->reset();
+		printf("encoder init ready: \r\n");
 	}else if (this->encoderId == ENCODER_3){
 		GPIO_InitTypeDef GPIO_InitStructure;
 		// turn on the clocks for each of the ports needed
@@ -120,6 +120,7 @@ void EncoderToTimer::init(Encoder_TypeDef encoderId){
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
 		//GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 		GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
+
 		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
 		GPIO_Init(GPIOB, &GPIO_InitStructure);
 
@@ -157,6 +158,109 @@ void EncoderToTimer::init(Encoder_TypeDef encoderId){
 
 		this->reset();
 		printf("encoder init ready: \r\n");
+
+	}else if (this->encoderId == ENCODER_4){
+		GPIO_InitTypeDef GPIO_InitStructure;
+		// turn on the clocks for each of the ports needed
+		RCC_AHB1PeriphClockCmd (RCC_AHB1Periph_GPIOA, ENABLE);
+
+
+		// now configure the pins themselves
+		// they are all going to be inputs with pullups
+		GPIO_StructInit (&GPIO_InitStructure);
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+		//GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+		GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
+		GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
+		GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+
+		// Connect the pins to their Alternate Functions
+		GPIO_PinAFConfig (GPIOA, GPIO_PinSource8, GPIO_AF_TIM1);
+		GPIO_PinAFConfig (GPIOA, GPIO_PinSource9, GPIO_AF_TIM1);
+
+
+		// Timer peripheral clock enable
+
+		RCC_APB2PeriphClockCmd (RCC_APB2Periph_TIM1, ENABLE);
+
+
+		// set them up as encoder inputs
+		// set both inputs to rising polarity to let it use both edges
+		/*
+		TIM_EncoderInterfaceConfig (TIM4, TIM_EncoderMode_TI12,
+								  TIM_ICPolarity_Rising,
+								  TIM_ICPolarity_Rising);
+		*/
+		TIM_EncoderInterfaceConfig (TIM1, TIM_EncoderMode_TI1,
+										  TIM_ICPolarity_Rising,
+										  TIM_ICPolarity_Rising);
+
+		TIM_SetAutoreload (TIM1, 0xffff);
+
+		// turn on the timer/counters
+		TIM_Cmd (TIM1, ENABLE);
+
+		this->reset();
+		printf("encoder init ready: \r\n");
+	}else if (this->encoderId == ENCODER_5){
+
+		//UNTESTED
+
+
+		GPIO_InitTypeDef GPIO_InitStructure;
+		// turn on the clocks for each of the ports needed
+		RCC_AHB1PeriphClockCmd (RCC_AHB1Periph_GPIOA, ENABLE);
+
+
+		// now configure the pins themselves
+		// they are all going to be inputs with pullups
+		GPIO_StructInit (&GPIO_InitStructure);
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+		//GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+		GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
+
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+		GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+		GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+
+		// Connect the pins to their Alternate Functions
+		GPIO_PinAFConfig (GPIOA, GPIO_PinSource0, GPIO_AF_TIM5);
+		GPIO_PinAFConfig (GPIOA, GPIO_PinSource1, GPIO_AF_TIM5);
+
+
+		// Timer peripheral clock enable
+		RCC_APB1PeriphClockCmd (RCC_APB1Periph_TIM5, ENABLE);
+
+
+		// set them up as encoder inputs
+		// set both inputs to rising polarity to let it use both edges
+		/*
+		TIM_EncoderInterfaceConfig (TIM4, TIM_EncoderMode_TI12,
+								  TIM_ICPolarity_Rising,
+								  TIM_ICPolarity_Rising);
+		*/
+		TIM_EncoderInterfaceConfig (TIM5, TIM_EncoderMode_TI1,
+										  TIM_ICPolarity_Rising,
+										  TIM_ICPolarity_Rising);
+
+
+
+		TIM_SetAutoreload (TIM5, 0xffff);
+
+
+		// turn on the timer/counters
+		TIM_Cmd (TIM5, ENABLE);
+
+		this->reset();
+		printf("encoder init ready: \r\n");
+
 	}else{
 
 		printf("wrong encoder ID \r\n");
@@ -172,18 +276,23 @@ void EncoderToTimer::refresh(){
 		this->timerValue = TIM3->CNT;
 	}else if (this->encoderId == ENCODER_3){
 		this->timerValue = TIM4->CNT;
+	}else if (this->encoderId == ENCODER_4){
+		this->timerValue = TIM1->CNT;
+
+	}else if (this->encoderId == ENCODER_5){
+		this->timerValue = TIM5->CNT;
+
 	}
 
 	//get absolute distance between the two last values.
 	//uint16_t difference;
 	//diff = this->timerValue > y ? this->timerValue - y : y - this->timerValue;
-
 	if (this->timerValue > this->previousRefreshTimerValue){
 		if (this->timerValue - this-> previousRefreshTimerValue >= NUMBER_OF_STEPS_TO_ASSUME_OVERFLOW){
 			//assume overflow --> subtraction.
 			this->position = this->position - this->previousRefreshTimerValue - (65535 - this->timerValue);
-			//printf("**********neg overflow, steps: %d \r\n" , this->timerValue - this-> previousRefreshTimerValue);
-			printf("---\r\n");
+			printf("**********neg overflow, steps: %d \r\n" , this->timerValue - this-> previousRefreshTimerValue);
+			//printf("---\r\n");
 		}else{
 			//add increment to position
 			this->position += this->timerValue - this->previousRefreshTimerValue;
@@ -192,14 +301,17 @@ void EncoderToTimer::refresh(){
 		if (this-> previousRefreshTimerValue  - this->timerValue >= NUMBER_OF_STEPS_TO_ASSUME_OVERFLOW){
 			//assume overflow --> addition
 			this->position = this->position + (65535 - this->previousRefreshTimerValue) + this->timerValue;
-			//printf("**********pos overflow, steps: %d\r\n" ,this-> previousRefreshTimerValue - this->timerValue);
-			printf("+++\r\n");
+			printf("**********pos overflow, steps: %d\r\n" ,this-> previousRefreshTimerValue - this->timerValue);
+			//printf("+++\r\n");
 		}else{
 			//subtract difference from position
 			this->position -=  this->previousRefreshTimerValue - this->timerValue;
 		}
 
 	}
+
+
+
 
 }
 
@@ -214,6 +326,10 @@ void EncoderToTimer::reset(){
 		TIM_SetCounter (TIM3, 0);
 	}else if (this->encoderId == ENCODER_3){
 		TIM_SetCounter (TIM4, 0);
+	}else if (this->encoderId == ENCODER_4){
+		TIM_SetCounter (TIM1, 0);
+	}if (this->encoderId == ENCODER_5){
+		TIM_SetCounter (TIM5, 0);
 	}
 
 	refresh();

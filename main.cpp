@@ -69,41 +69,37 @@ int main(void)
 	init();
 	initDiscoveryBoard();
 
+
 	/**/
 	//init machine control
 	MachineControl machineControl;
 	machineControlPointer = &machineControl;
+#ifdef USE_VCP
 	machineControl.getCharFunctionPointer = &VCP_get_char;
+#endif
 	/**/
 
 
 
 
-	/*
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
-	GPIO_InitTypeDef GPIO_InitDef;
-	GPIO_InitDef.GPIO_Pin = GPIO_Pin_0;
-	GPIO_InitDef.GPIO_Mode = GPIO_Mode_IN ;
-
-	GPIO_InitDef.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitDef.GPIO_PuPd = GPIO_PuPd_DOWN;
-	GPIO_InitDef.GPIO_Speed = GPIO_Speed_100MHz;
-	GPIO_Init(GPIOC ,&GPIO_InitDef);
-	/*
-
-	if (GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_0)){
-		printf("button pressed\r\n " );
-	}else{
-		printf("button not pressed\r\n " );
-
-	}
-*/
 
 
+
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
+	//GPIO_InitTypeDef GPIO_initStructre; defined in .h file, has to be available because we work with two buttons on one pin...
+	//Analog pin configuration
+	GPIO_InitTypeDef GPIO_initStructre;
+	GPIO_initStructre.GPIO_Pin = GPIO_Pin_12 ;
+	GPIO_initStructre.GPIO_Mode = GPIO_Mode_OUT ;
+	GPIO_initStructre.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_initStructre.GPIO_OType = GPIO_OType_PP;
+	GPIO_initStructre.GPIO_PuPd = GPIO_PuPd_UP;
+	GPIO_Init(GPIOD,&GPIO_initStructre);//Affecting the port with the initialization structure configuration
+
+	GPIO_SetBits(GPIOD, GPIO_Pin_12);
 
 
 	bool isInit = false;
-
 	millisMemory_outputToSerial = millis;
 
 	//refresh machine control loop
@@ -115,7 +111,6 @@ int main(void)
 
 
 /*
-
 		if (millis - millisMemory_testing >= 1){
 			millisMemory_testing = millis; //edge control
 
@@ -152,13 +147,8 @@ int main(void)
 				testEncoder2.init(ENCODER_2);
 				testEncoder3.init(ENCODER_3);
 				////////encodersInit();
-
-
 			}
 		}
-
-		//
-		//}
 
 		 */
 /*
@@ -169,6 +159,29 @@ int main(void)
 				printf("Char Sent: %c  \r\n", theByte); //VCP_put_char(theByte);
 			}
 		}
+		/**/
+
+
+		/**/
+			RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+			GPIO_InitTypeDef GPIO_InitDef;
+			GPIO_InitDef.GPIO_Pin = GPIO_Pin_0;
+			GPIO_InitDef.GPIO_Mode = GPIO_Mode_IN ;
+
+			GPIO_InitDef.GPIO_OType = GPIO_OType_PP;
+			GPIO_InitDef.GPIO_PuPd = GPIO_PuPd_DOWN;
+			GPIO_InitDef.GPIO_Speed = GPIO_Speed_100MHz;
+			GPIO_Init(GPIOA ,&GPIO_InitDef);
+
+
+			if (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0)){
+			//	printf("button pressed\r\n " );
+
+
+			}else{
+			//	printf("button not pressed\r\n " );
+
+			}
 		/**/
 
 

@@ -152,7 +152,7 @@ private:
 	//encoders (with timers)
 	EncoderToTimer encoder1;
 	EncoderToTimer encoder2;
-	EncoderToTimer encoder3;
+	EncoderToTimer encoder5;
 	EncoderToTimer* EncoderToTimerHandles[6];
 
 	//encoders
@@ -187,7 +187,7 @@ private:
 	int8_t activeLimit=0;
 
 	uint8_t externalZeroingNumberConsequtiveLongPresses = 0;
-	bool externalZeroingNumberConsequtiveLongPresses_numberIsAdded =false;
+	bool externalZeroingNumberConsequtiveLongPresses_numberIsAdded = false;
 
 };
 

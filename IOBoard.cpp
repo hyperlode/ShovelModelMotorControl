@@ -628,12 +628,14 @@ void IOBoard::ledSequenceRefreshValue(int32_t value){
 		if (value - this->valueMemory > NUMBER_OF_SUBSTEPS_PER_LED_SEQUENCE_STEP){
 
 			ledSequenceUpdate( true);
-			this->valueMemory += NUMBER_OF_SUBSTEPS_PER_LED_SEQUENCE_STEP;
+			//this->valueMemory += NUMBER_OF_SUBSTEPS_PER_LED_SEQUENCE_STEP;
+			this->valueMemory = value;
 		}
 	}else{
 		if (this->valueMemory - value  > NUMBER_OF_SUBSTEPS_PER_LED_SEQUENCE_STEP){
 			ledSequenceUpdate( false);
-			this->valueMemory -= NUMBER_OF_SUBSTEPS_PER_LED_SEQUENCE_STEP;
+			//this->valueMemory -= NUMBER_OF_SUBSTEPS_PER_LED_SEQUENCE_STEP;
+			this->valueMemory = value;
 		}
 	}
 }

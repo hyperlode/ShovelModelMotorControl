@@ -41,7 +41,7 @@ MachineControl::MachineControl(){
 	adcZeroSpeedRawValues[1]=ADC_MOTOR_CROWD_ZERO_SPEED_VALUE;
 	adcZeroSpeedRawValues[2]=ADC_MOTOR_SWING_ZERO_SPEED_VALUE;
 
-	//DAC --> control the MAXON motor boards
+	//DAC --> to control the MAXON motor boards
 	dacSpeedControl_Hoist.init(1);
 	DacHandlerPointers[0] = &dacSpeedControl_Hoist;
 
@@ -116,6 +116,7 @@ MachineControl::MachineControl(){
 	printf("Userinterface: \r\n");
 	printf("To interact. Please send v, s, m or a  \r\n");
 #endif
+	initExtraButton();
 
 }
 
@@ -125,8 +126,8 @@ void MachineControl::initEncoders(){
 	EncoderToTimerHandles[0] = &encoder1;
 	encoder2.init(ENCODER_2);
 	EncoderToTimerHandles[1] = &encoder2;
-	encoder3.init(ENCODER_3);
-	EncoderToTimerHandles[2] = &encoder3;
+	encoder5.init(ENCODER_5);
+	EncoderToTimerHandles[2] = &encoder5;
 }
 
 void MachineControl::speedInputADCInterrupt(uint16_t potentioNumber, uint16_t value){
@@ -326,12 +327,13 @@ void MachineControl::refresh(uint32_t millis){
 		//process encoder values from timers
 		if (millis - millisMemory_encoderProcess >= REFRESH_DELAY_MILLIS_ENCODERS){
 			this->millisMemory_encoderProcess = millis; //edge control
+
 			encoder1.refresh();
 			motor1.updatePosition(encoder1.getValue());
 			encoder2.refresh();
 			motor2.updatePosition(encoder2.getValue());
-			encoder3.refresh();
-			motor3.updatePosition(encoder3.getValue());
+			encoder5.refresh();
+			motor3.updatePosition(encoder5.getValue());
 
 		}
 
@@ -376,7 +378,7 @@ void MachineControl::refresh(uint32_t millis){
 
 			//total motion indicator.
 			IOBoardHandler[3]->ledSequenceRefreshValue(MotorControlHandles[0]->getPosition() + MotorControlHandles[1]->getPosition() +MotorControlHandles[2]->getPosition() );
-
+			//IOBoardHandler[3]->ledSequenceRefreshValue(MotorControlHandles[2]->getPosition() );
 
 
 		}
@@ -388,7 +390,7 @@ void MachineControl::refresh(uint32_t millis){
 
 				if( GPIO_ReadInputDataBit(GPIOD, GPIO_Pin_12)){
 
-					printf("pd12\r\n");
+					//printf("pd12\r\n");
 				}
 
 
@@ -411,6 +413,7 @@ void MachineControl::refresh(uint32_t millis){
 				//positive edge
 				millisMemory_externalZeroingButtonPressStartTime = this->millis;
 				externalZeroingNumberConsequtiveLongPresses_numberIsAdded =false;
+
 			}
 
 			if (!buttonPressed && externalZeroingButtonPressedMemory){
@@ -533,6 +536,7 @@ void MachineControl::refresh(uint32_t millis){
 						printf("raw input adc: %d, raw output dac: %d\r\n",  panel1.getSliderValue(2),this->dacValues[2]);
 						printf("position: %d \r\n", motor3.getPosition());
 						printf("limits:  min:  %d  --  max: %d \r\n", motor3.getLimit(false), motor3.getLimit(true));
+						printf ("bare encoder timer values: 0x%08x",encoder5.getValue());
 
 					}else{
 						printf("BMTWBM shovel model speed and position control v1.0 \r\nNo valid command detected. Please send\r\n 1 for hoist , \r\n 2 for crowd , \r\n 3 for swing motor status  ,\r\n. \r\n");
@@ -595,7 +599,8 @@ void MachineControl::initExtraButton(){
 	//GPIO_InitStruct.GPIO_OType = GPIO_OType_OD;
 	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_12;
 	//GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
-	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_DOWN;
+	//GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_DOWN;
+	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_Init(GPIOD, &GPIO_InitStruct);
 

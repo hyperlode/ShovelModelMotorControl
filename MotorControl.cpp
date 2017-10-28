@@ -294,13 +294,16 @@ int8_t MotorControl::getSpeedPercentageChecked(){
 		case MODE_CALIBRATE:
 			if(!getZeroingAxisHappenedAtLeastOnce()){
 				//not zeroed --> only super low speed allowed.
-				return this->setSpeedPercentage/10;
+				//return this->setSpeedPercentage/10;
+				return this->setSpeedPercentage/2;
 			}else if (withinRange()  || (belowLimitMinimum() && this->setSpeedPercentage>0) || (aboveLimitMaximum() && this->setSpeedPercentage<0) ){
 				//full speed if zeroed and not crossing limits.
-				return this->setSpeedPercentage/4;
+				//return this->setSpeedPercentage/4;
+				return this->setSpeedPercentage/2;
 			}else{
 				//limit violated or not yet set...
-				return this->setSpeedPercentage/10;
+				//return this->setSpeedPercentage/10;
+				return this->setSpeedPercentage/2;
 			}
 			break;
 
