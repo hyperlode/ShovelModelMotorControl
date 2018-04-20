@@ -158,7 +158,7 @@ void MachineControl::refresh(uint32_t millis){
 		//}
 
 		if (panel4.getButtonEdgeDePressed(BUTTON_MOTORCONTROLLER_SELECT_MODE)){
-			if (getMotorsZeroedSinceStartup()){ //no way we will do calibration if the motors are not zeroed.
+			if (getMotorsZeroedSinceStartup()){ //no way we will do calibration (= set the limits) if the motors are not zeroed.
 				motorControllerMode++;
 				if (motorControllerMode>=NUMBER_OF_MODES){
 					motorControllerMode  = 0;
@@ -174,6 +174,7 @@ void MachineControl::refresh(uint32_t millis){
 					//	panel4.setLedBlinkPeriodMillis(LED_MOTORCONTROLLER_MODE,1000);
 					//	break;
 					case MODE_CALIBRATE:
+						//overrule the limits and set the limits.
 						panel4.setLed(LED_MOTORCONTROLLER_MODE,true);
 						panel4.setLedBlinkPeriodMillis(LED_MOTORCONTROLLER_MODE,250);
 						break;
