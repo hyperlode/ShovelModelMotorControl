@@ -200,9 +200,6 @@ void MachineControl::refresh(uint32_t millis){
 
 				if ( panel4.getButtonState(BUTTON_ZEROING_ALL_AXIS) &&  this->millis - this->zeroingButtonPressStartTime > ZEROING_BUTTON_TIME_DELAY_MILLIS ){
 					setAllMotorPositionsToZero();
-
-
-
 				}
 
 				break;
